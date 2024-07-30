@@ -1,0 +1,54 @@
+[build-system]
+requires = [
+    "setuptools >= 65",
+    "setuptools_scm[toml] >= 4, <6",
+    "setuptools_scm_git_archive",
+    "wheel >= 0.29.0",
+    "pip-tools",
+]
+build-backend = 'setuptools.build_meta'
+
+[tool.setuptools_scm]
+write_to = "src/version.py"
+git_describe_command = "git describe --dirty --tags --long --match v* --first-parent"
+
+[project]
+name = "accfifo"
+dynamic = ["version"]
+description = "PZ fork of accfifo"
+authors = [{ name = "Pavel", email = "pzheltov@gmail.com" }]
+classifiers = [
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "DateTime",
+    "click>=8",
+    "cloup",
+    "rich",
+    "humanize",
+    "typing",
+    "py-moneyed"
+]
+scripts = { "accfifo" = "accfifo.cli:main" }
+
+[tool.setuptools]
+packages.find = { where = ["src"] }
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.in"] }
+optional-dependencies.test = { file = ["requirements-test.txt"] }
+
+[tool.distutils.bdist_wheel]
+universal = true
+
+[tool.autopep8]
+max_line_length = 120
+in-place = true
+recursive = true
+aggressive = 3
+
+[tool.pip-tools]
+generate-hashes = true

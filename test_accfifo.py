@@ -12,384 +12,384 @@ class TestFIFO(unittest.TestCase):
         """
         Tests the case that there are no entries.
         """
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO()
 
-        ## Inventory is empty:
+        # Inventory is empty:
         self.assertTrue(len(fifo.inventory) == 0)
         self.assertTrue(fifo.is_empty)
 
-        ## There is no trace:
+        # There is no trace:
         self.assertTrue(len(fifo.trace) == 0)
 
-        ## There is no profit and no loss:
+        # There is no profit and no loss:
         self.assertTrue(fifo.profit_and_loss == 0)
 
-        ## There is no stock in the inventory:
+        # There is no stock in the inventory:
         self.assertEqual(fifo.stock, 0)
 
-        ## No average cost could be calculated:
+        # No average cost could be calculated:
         self.assertIsNone(fifo.avgcost)
 
     def test_single_buy(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(100, 10)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is not empty:
+        # Inventory is not empty:
         self.assertTrue(len(fifo.inventory) == 1)
         self.assertFalse(fifo.is_empty)
 
-        ## There is no trace as there are no closing entries:
+        # There is no trace as there are no closing entries:
         self.assertTrue(len(fifo.trace) == 0)
 
-        ## There is no profit and no loss:
+        # There is no profit and no loss:
         self.assertTrue(fifo.profit_and_loss == 0)
 
-        ## There is stock in the inventory:
+        # There is stock in the inventory:
         self.assertTrue(fifo.stock, 100)
 
-        ## The average cost was calculated:
+        # The average cost was calculated:
         self.assertIsNotNone(fifo.avgcost)
         self.assertEqual(fifo.avgcost, 10)
 
     def test_two_buys(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(100, 10), Entry(100, 20)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is not empty:
+        # Inventory is not empty:
         self.assertTrue(len(fifo.inventory) == 2)
         self.assertFalse(fifo.is_empty)
 
-        ## There is no trace as there are no closing entries:
+        # There is no trace as there are no closing entries:
         self.assertTrue(len(fifo.trace) == 0)
 
-        ## There is no profit and no loss:
+        # There is no profit and no loss:
         self.assertTrue(fifo.profit_and_loss == 0)
 
-        ## There is stock in the inventory:
+        # There is stock in the inventory:
         self.assertTrue(fifo.stock, 200)
 
-        ## The average cost was calculated:
+        # The average cost was calculated:
         self.assertIsNotNone(fifo.avgcost)
         self.assertEqual(fifo.avgcost, 15)
 
     def test_single_sell(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(-100, 10)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is not empty:
+        # Inventory is not empty:
         self.assertTrue(len(fifo.inventory) == 1)
         self.assertFalse(fifo.is_empty)
 
-        ## There is no trace as there are no closing entries:
+        # There is no trace as there are no closing entries:
         self.assertTrue(len(fifo.trace) == 0)
 
-        ## There is no profit and no loss:
+        # There is no profit and no loss:
         self.assertTrue(fifo.profit_and_loss == 0)
 
-        ## There is stock in the inventory:
+        # There is stock in the inventory:
         self.assertTrue(fifo.stock, -100)
 
-        ## The average cost was calculated:
+        # The average cost was calculated:
         self.assertIsNotNone(fifo.avgcost)
         self.assertEqual(fifo.avgcost, 10)
 
     def test_two_buys(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(-100, 10), Entry(-100, 20)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is not empty:
+        # Inventory is not empty:
         self.assertTrue(len(fifo.inventory) == 2)
         self.assertFalse(fifo.is_empty)
 
-        ## There is no trace as there are no closing entries:
+        # There is no trace as there are no closing entries:
         self.assertTrue(len(fifo.trace) == 0)
 
-        ## There is no profit and no loss:
+        # There is no profit and no loss:
         self.assertTrue(fifo.profit_and_loss == 0)
 
-        ## There is stock in the inventory:
+        # There is stock in the inventory:
         self.assertTrue(fifo.stock, -200)
 
-        ## The average cost was calculated:
+        # The average cost was calculated:
         self.assertIsNotNone(fifo.avgcost)
         self.assertEqual(fifo.avgcost, 15)
 
     def test_quick_square(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(100, 10), Entry(-100, 10)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is empty:
+        # Inventory is empty:
         self.assertTrue(len(fifo.inventory) == 0)
         self.assertTrue(fifo.is_empty)
 
-        ## There is a trace as all the stock is sold out:
+        # There is a trace as all the stock is sold out:
         self.assertTrue(len(fifo.trace) == 1)
 
-        ## There is no profit/loss is equal to zero:
+        # There is no profit/loss is equal to zero:
         self.assertTrue(fifo.profit_and_loss == 0)
 
-        ## There is no stock in the inventory:
+        # There is no stock in the inventory:
         self.assertEqual(fifo.stock, 0)
 
-        ## No average cost could be calculated:
+        # No average cost could be calculated:
         self.assertIsNone(fifo.avgcost)
 
     def test_quick_alternate_square(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(100, 10), Entry(-100, 10)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is empty:
+        # Inventory is empty:
         self.assertTrue(len(fifo.inventory) == 0)
         self.assertTrue(fifo.is_empty)
 
-        ## There is a trace as all the stock is sold out:
+        # There is a trace as all the stock is sold out:
         self.assertTrue(len(fifo.trace) == 1)
 
-        ## There is no stock in the inventory:
+        # There is no stock in the inventory:
         self.assertEqual(fifo.stock, 0)
 
-        ## No average cost could be calculated:
+        # No average cost could be calculated:
         self.assertIsNone(fifo.avgcost)
 
     def test_double_square(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(100, 10), Entry(-100, 10), Entry(100, 10), Entry(-100, 10)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is empty:
+        # Inventory is empty:
         self.assertTrue(len(fifo.inventory) == 0)
         self.assertTrue(fifo.is_empty)
 
-        ## There is a trace as all the stock is sold out:
+        # There is a trace as all the stock is sold out:
         self.assertTrue(len(fifo.trace) == 2)
 
-        ## There is no profit and no loss:
+        # There is no profit and no loss:
         self.assertTrue(fifo.profit_and_loss == 0)
 
-        ## There is no stock in the inventory:
+        # There is no stock in the inventory:
         self.assertEqual(fifo.stock, 0)
 
-        ## No average cost could be calculated:
+        # No average cost could be calculated:
         self.assertIsNone(fifo.avgcost)
 
     def test_double_alternate_square(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(100, 10), Entry(-100, 10), Entry(-100, 10), Entry(100, 10)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is empty:
+        # Inventory is empty:
         self.assertTrue(len(fifo.inventory) == 0)
         self.assertTrue(fifo.is_empty)
 
-        ## There is a trace as all the stock is sold out:
+        # There is a trace as all the stock is sold out:
         self.assertTrue(len(fifo.trace) == 2)
 
-        ## There is no stock in the inventory:
+        # There is no stock in the inventory:
         self.assertEqual(fifo.stock, 0)
 
-        ## No average cost could be calculated:
+        # No average cost could be calculated:
         self.assertIsNone(fifo.avgcost)
 
     def test_alternate_buy_sell(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(100, 10), Entry(-200, 10)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is not empty:
+        # Inventory is not empty:
         self.assertTrue(len(fifo.inventory) == 1)
         self.assertFalse(fifo.is_empty)
 
-        ## There is a trace as some stock entries are closed:
+        # There is a trace as some stock entries are closed:
         self.assertTrue(len(fifo.trace) == 1)
 
-        ## There is no profit and no loss:
+        # There is no profit and no loss:
         self.assertTrue(fifo.profit_and_loss == 0)
 
-        ## There is some stock in the inventory:
+        # There is some stock in the inventory:
         self.assertEqual(fifo.stock, -100)
 
-        ## Average cost is calculated:
+        # Average cost is calculated:
         self.assertIsNotNone(fifo.avgcost)
         self.assertEqual(fifo.avgcost, 10)
 
     def test_alternate_sell_buy(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(-100, 10), Entry(200, 10)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is not empty:
+        # Inventory is not empty:
         self.assertTrue(len(fifo.inventory) == 1)
         self.assertFalse(fifo.is_empty)
 
-        ## There is a trace as some stock entries are closed:
+        # There is a trace as some stock entries are closed:
         self.assertTrue(len(fifo.trace) == 1)
 
-        ## There is no profit and no loss:
+        # There is no profit and no loss:
         self.assertTrue(fifo.profit_and_loss == 0)
 
-        ## There is some stock in the inventory:
+        # There is some stock in the inventory:
         self.assertEqual(fifo.stock, 100)
 
-        ## Average cost is calculated:
+        # Average cost is calculated:
         self.assertIsNotNone(fifo.avgcost)
         self.assertEqual(fifo.avgcost, 10)
 
     def test_multiple_entry_stock_out(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(100, 10), Entry(-50, 10), Entry(-50, 15)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is empty:
+        # Inventory is empty:
         self.assertTrue(len(fifo.inventory) == 0)
         self.assertTrue(fifo.is_empty)
 
-        ## There is a trace as some stock entries are closed:
+        # There is a trace as some stock entries are closed:
         self.assertTrue(len(fifo.trace) == 2)
 
-        ## There is no profit and no loss:
+        # There is no profit and no loss:
         self.assertTrue(fifo.profit_and_loss == -250)
 
-        ## There is some stock in the inventory:
+        # There is some stock in the inventory:
         self.assertEqual(fifo.stock, 0)
 
-        ## No average cost is calculated:
+        # No average cost is calculated:
         self.assertIsNone(fifo.avgcost)
 
     def test_multiple_entry_stock_out_alt(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(-100, 10), Entry(50, 10), Entry(50, 15)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is empty:
+        # Inventory is empty:
         self.assertTrue(len(fifo.inventory) == 0)
         self.assertTrue(fifo.is_empty)
 
-        ## There is a trace as some stock entries are closed:
+        # There is a trace as some stock entries are closed:
         self.assertTrue(len(fifo.trace) == 2)
 
-        ## There is no profit and no loss:
+        # There is no profit and no loss:
         self.assertTrue(fifo.profit_and_loss == 250)
 
-        ## There is some stock in the inventory:
+        # There is some stock in the inventory:
         self.assertEqual(fifo.stock, 0)
 
-        ## No average cost is calculated:
+        # No average cost is calculated:
         self.assertIsNone(fifo.avgcost)
 
     def test_double_multiple_entry_stock_out(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(50, 10), Entry(50, 12), Entry(-50, 10), Entry(-50, 15)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is empty:
+        # Inventory is empty:
         self.assertTrue(len(fifo.inventory) == 0)
         self.assertTrue(fifo.is_empty)
 
-        ## There is a trace as some stock entries are closed:
+        # There is a trace as some stock entries are closed:
         self.assertTrue(len(fifo.trace) == 2)
 
-        ## There is no profit and no loss:
+        # There is no profit and no loss:
         self.assertTrue(fifo.profit_and_loss == -150)
 
-        ## There is some stock in the inventory:
+        # There is some stock in the inventory:
         self.assertEqual(fifo.stock, 0)
 
-        ## No average cost is calculated:
+        # No average cost is calculated:
         self.assertIsNone(fifo.avgcost)
 
     def test_double_multiple_entry_stock_out_alt(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(40, 10), Entry(60, 12), Entry(-50, 10), Entry(-50, 15)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is empty:
+        # Inventory is empty:
         self.assertTrue(len(fifo.inventory) == 0)
         self.assertTrue(fifo.is_empty)
 
-        ## There is a trace as some stock entries are closed:
+        # There is a trace as some stock entries are closed:
         self.assertTrue(len(fifo.trace) == 3)
 
-        ## There is no profit and no loss:
+        # There is no profit and no loss:
         self.assertTrue(fifo.profit_and_loss == -130)
 
-        ## There is some stock in the inventory:
+        # There is some stock in the inventory:
         self.assertEqual(fifo.stock, 0)
 
-        ## No average cost is calculated:
+        # No average cost is calculated:
         self.assertIsNone(fifo.avgcost)
 
     def test_double_multiple_entry_stock_out_alt2(self):
-        ## Create the entry:
+        # Create the entry:
         entries = [Entry(60, 10), Entry(40, 12), Entry(-50, 10), Entry(-50, 15)]
 
-        ## Create the FIFO accounting:
+        # Create the FIFO accounting:
         fifo = FIFO(entries)
 
-        ## Inventory is empty:
+        # Inventory is empty:
         self.assertTrue(len(fifo.inventory) == 0)
         self.assertTrue(fifo.is_empty)
 
-        ## There is a trace as some stock entries are closed:
+        # There is a trace as some stock entries are closed:
         self.assertTrue(len(fifo.trace) == 3)
 
-        ## There is no profit and no loss:
+        # There is no profit and no loss:
         self.assertTrue(fifo.profit_and_loss == -170)
 
-        ## There is some stock in the inventory:
+        # There is some stock in the inventory:
         self.assertEqual(fifo.stock, 0)
 
-        ## No average cost is calculated:
+        # No average cost is calculated:
         self.assertIsNone(fifo.avgcost)
 
     def test_complex_trades(self):
-        ## Create the FIFO accounting, check the stock and the average cost:
+        # Create the FIFO accounting, check the stock and the average cost:
         fifo = FIFO([Entry(60, 10), Entry(10, 12), Entry(-50, 10)])
         self.assertEqual(fifo.stock, 20)
         self.assertEqual(fifo.avgcost, 11)
         self.assertEqual(fifo.profit_and_loss, 0)
 
-        ## Create the FIFO accounting, check the stock and the average cost:
+        # Create the FIFO accounting, check the stock and the average cost:
         fifo = FIFO([Entry(60, 10), Entry(10, 12), Entry(-80, 10)])
         self.assertEqual(fifo.stock, -10)
         self.assertEqual(fifo.avgcost, 10)
         self.assertEqual(fifo.profit_and_loss, 20)
 
-        ## Create the FIFO accounting, check the stock and the average cost:
+        # Create the FIFO accounting, check the stock and the average cost:
         fifo = FIFO(
             [
                 Entry(60, 10),
@@ -404,7 +404,7 @@ class TestFIFO(unittest.TestCase):
         self.assertEqual(fifo.avgcost, 15)
         self.assertEqual(fifo.profit_and_loss, -200)
 
-        ## Let's do a handful one:
+        # Let's do a handful one:
         fifo = FIFO(
             [
                 Entry(20, 10),
@@ -485,5 +485,5 @@ class TestFIFO(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    ## Test the above:
+    # Test the above:
     unittest.main()
