@@ -1,9 +1,9 @@
 accfifo: A FIFO accounting calculator
 =====================================
 
-.. image:: https://travis-ci.org/vst/accfifo.svg?branch=develop
-
-``TODO: Provide a complete README file``
+```
+python3 src/accfifo/cli.py
+```
 
 Usage
 -----

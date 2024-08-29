@@ -3,6 +3,7 @@ from collections import deque
 
 from accfifo.entry import Entry
 from accfifo.munch import Munch
+from accfifo.tax_row import TaxRow
 
 
 class FIFO(object):
@@ -119,8 +120,8 @@ class FIFO(object):
         Fills existing stock entries by calculating new stocks if required.
         """
         # OK, we know that this is a contra-entry for our existing
-        # stock entries, ie. if our balance is positive, this is
-        # negative, or vice-versa. Keep in mind that it may even be
+        # stock entries, i.e. if our balance is positive, this is
+        # negative, or vice versa. Keep in mind that it may even be
         # bigger in quantity compared to out balance which will
         # eventually reverse the sign of our balance, like selling
         # 100 items when we have stock only for 50. This function
@@ -202,7 +203,7 @@ class FIFO(object):
             #
             # There is a special case which is called "short-selling"
             # in the financial jargon. This is similar to backorders
-            # in the convential trading of goods which means selling
+            # in the conventional trading of goods which means selling
             # goods which you don't have in your inventory yet.
             #
             # This means that we have the following possible
@@ -241,11 +242,22 @@ class FIFO(object):
             #
             # Note that we must make sure that we skip "0"-quantity entries.
             elif not entry.zero:
-                # OK, the entry is not zero. We will proceeding
-                # filling positions:
+                # OK, the entry is not zero. We will proceed to filling of the positions:
                 self._fill(entry)
 
             # We are done with the entry. Let's move to the next one.
 
-        # This marks the end of the the FIFO computation:
+        # This marks the end of the FIFO computation:
         self._finished_at = datetime.datetime.now()
+
+    def group_as_tax_rows(self) -> TaxRow:
+        """Group munches into tax rows identified by (tx, st) pair"""
+        tax_row = TaxRow()
+        for m in self.trace:
+            (_in, _out) = m
+            if len(tax_row) != 0 and (m.st() != tax_row.st or _out.tx != tax_row.tx):
+                yield tax_row
+                tax_row = TaxRow()
+            tax_row.append(m)
+        if len(tax_row) != 0:
+            yield tax_row
