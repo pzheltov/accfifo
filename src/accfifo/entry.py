@@ -12,8 +12,6 @@ def format_st(st: bool):
     return 'ST' if st else '  '
 
 def get_tx(row: dict) -> str:
-    if 'Lot' in row:
-        return str(row['Lot'])
     if 'Tx' in row:
         return str(row['Tx'])
     return f'sh{int(row['Qty'])}'
@@ -74,12 +72,14 @@ class Entry(object):
         if self.date is None:
             return f"{self.quantity:10} @ {money :>6} tx {self.tx:>3}"
         else:
-            return f"{self.quantity:10} @ {money :>6} on {self.date.date()} tx {self.tx:>3}"
+            dt = self.date.date().strftime('%m/%d/%Y')
+            return f"{self.quantity:10} @ {money :>6} on {dt} tx {self.tx:>3}"
 
     def __rich_console__(self, console: Console, options: ConsoleOptions) -> RenderResult:
         my_table = Table("id", "qty", "price", "date", show_header=False, show_lines=False, show_edge=False)
         money = format_money(self.price, locale='en_US')
-        my_table.add_row(f'{self.tx:>3}', f'{self.quantity:10}', f'{money:>6}', str(self.date.date()))
+        d = self.date.date().strftime('%m/%d/%Y')
+        my_table.add_row(f'{self.tx:>3}', f'{self.quantity:10}', f'{money:>6}', d)
         yield my_table
 
 

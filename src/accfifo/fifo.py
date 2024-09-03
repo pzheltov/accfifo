@@ -1,6 +1,10 @@
 import datetime
 from collections import deque
 
+from typing import Iterable
+
+from typing_extensions import Generator
+
 from accfifo.entry import Entry
 from accfifo.munch import Munch
 from accfifo.tax_row import TaxRow
@@ -250,14 +254,14 @@ class FIFO(object):
         # This marks the end of the FIFO computation:
         self._finished_at = datetime.datetime.now()
 
-    def group_as_tax_rows(self) -> TaxRow:
+    def group_as_tax_rows(self) -> Generator[TaxRow]:
         """Group munches into tax rows identified by (tx, st) pair"""
         tax_row = TaxRow()
         for m in self.trace:
             (_in, _out) = m
-            if len(tax_row) != 0 and (m.st() != tax_row.st or _out.tx != tax_row.tx):
+            if len(tax_row.lots) != 0 and (m.st() != tax_row.st or _out.tx != tax_row.tx):
                 yield tax_row
                 tax_row = TaxRow()
             tax_row.append(m)
-        if len(tax_row) != 0:
+        if len(tax_row.lots) != 0:
             yield tax_row
