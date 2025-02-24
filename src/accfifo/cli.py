@@ -1,10 +1,11 @@
-import datetime
+import logging
 import os
 
 import cloup
 from moneyed import format_money
 
 from rich.console import Console
+from rich.logging import RichHandler
 from rich.table import Table
 
 from accfifo.entry import format_st
@@ -19,9 +20,10 @@ from accfifo.tax_row import TaxRow, trace_table
 @cloup.option('--format', type=str, default='', help='Tabulate output. rich|plain')
 @cloup.version_option('0.2')
 def cli(filename: str, format: str):
-
-    fifo = read_csv(filename)
-
+    FORMAT = "%(message)s"
+    logging.basicConfig(level="NOTSET", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
+    log = logging.getLogger("rich")
+    fifo = read_csv(log, filename)
     if format == 'rich':
         console = Console()
         print('All transactions')
@@ -29,7 +31,7 @@ def cli(filename: str, format: str):
         print('All transactions grouped by type (ST/LT)')
         console.print(tax_table(fifo))
         for tax_row in fifo.group_as_tax_rows():
-            print(f'Out tx #{tax_row.tx}, {"ST" if tax_row.st else "LT"}, proceeds {tax_row.proceeds()}, cost basis {tax_row.cb()}')
+            print(f'Out tx #{tax_row.tx}, {tax_row.qty()} shares, {"ST" if tax_row.st else "LT"}, proceeds {tax_row.proceeds()}, cost basis {tax_row.cb()}')
             console.print(tax_row)
             print('\n')
     else:
@@ -51,7 +53,7 @@ def tax_table(fifo: FIFO):
     """Group munches into tax rows identified by (tx, st) pair"""
     table = Table(show_header=True, header_style='bold magenta')
     table.add_column('tx')
-    table.add_column('qty')
+    table.add_column('qty', width=8)
     table.add_column('st')
     table.add_column('proceeds',  justify="right")
     table.add_column('cb', justify="right")

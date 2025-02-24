@@ -16,7 +16,7 @@ class Munch(tuple[Entry, Entry]):
         proc = format_money(-_out.price * _out.quantity, locale='en_US')
         st = format_st(self.st())
         qty = self.qty()
-        return f"({_in}, sh {qty}, CB = {cb:>12}, {_out}), {st}, Proceeds {proc:>12}"
+        return f"({_in}, sh {qty:>10}, CB = {cb:>12}, {_out}), {st}, Proceeds {proc:>12}"
 
     def st(self):
         return self.term() <= datetime.timedelta(days=365)

@@ -14,6 +14,8 @@ def format_st(st: bool):
 def get_tx(row: dict) -> str:
     if 'Tx' in row:
         return str(row['Tx'])
+    if 'Lot' in row:
+        return str(row['Lot'])
     return f'sh{int(row['Qty'])}'
 
 
@@ -62,6 +64,7 @@ class Entry(object):
 
     @classmethod
     def from_row(cls, row: dict):
+        print(f'got row {row}')
         return Entry(tx=get_tx(row),
                      quantity=get_qty(row),
                      price=get_cost(row),

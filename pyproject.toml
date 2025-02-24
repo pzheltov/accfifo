@@ -32,7 +32,7 @@ dependencies = [
     "typing",
     "py-moneyed"
 ]
-scripts = { "accfifo" = "accfifo.cli:main" }
+scripts = { "accfifo" = "accfifo.cli:cli" }
 
 [tool.setuptools]
 packages.find = { where = ["src"] }
